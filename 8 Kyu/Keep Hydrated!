@@ -18,3 +18,10 @@ def litres(time):
 
 def litres(time):
     return time // 2
+
+# '>>' is the right bit-shift operator. 
+#Shifting a binary number one position to the right is equivalent to dividing it by 2 and discarding any remainder.
+# This one I learned after seeing binary shift in the Know It All Ninja.
+
+def litres(time):
+    return (time >> 1)
