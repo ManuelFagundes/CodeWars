@@ -5,7 +5,16 @@ def litres(time):
 
 
 # Another way of doing it, using the floor function
+
 import math
 def litres(time):
     litres = math.floor(0.5 * time)
     return  litres
+
+
+# Another way of doing...The // operator divides two numbers and returns the integer part of the quotient.
+#It effectively rounds the result down to the nearest whole number. Multiplying by 0.5 is equivalent to dividing by 2.
+#Therefore, time // 2 directly achieves the desired result: it divides the time by 2 and rounds the result down to the nearest integer.
+
+def litres(time):
+    return time // 2
