@@ -1,0 +1,28 @@
+#The code first finds the prime factorization of n. It iterates from 2 up to the square root of n to find prime factors.
+#The factors dictionary stores the prime factors as keys and their exponents as values.
+#It then iterates through the factors dictionary.
+#For each prime factor and its exponent, it calculates the remainder when the exponent is divided by k.
+#If the remainder is not zero, it means the exponent is not a multiple of k.
+#It calculates the difference k - remainder, which represents the number of additional factors needed to make the exponent a multiple of k.
+#It multiplies the multiplier by the prime factor raised to this difference.
+
+def mul_power(n, k):
+    
+    factors = {}
+    temp = n
+    i = 2
+    while i * i <= temp:
+        while temp % i == 0:
+            factors[i] = factors.get(i, 0) + 1
+            temp //= i
+        i += 1
+    if temp > 1:
+        factors[temp] = factors.get(temp, 0) + 1
+
+    multiplier = 1
+    for prime, exponent in factors.items():
+        remainder = exponent % k
+        if remainder != 0:
+            multiplier *= prime ** (k - remainder)
+
+    return multiplier
