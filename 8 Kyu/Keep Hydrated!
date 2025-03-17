@@ -1,1 +1,11 @@
+def litres(time):
+    litres = int(0.5 * time) # Using the int function because it truncates the decimal part and rounds it down.
+    return  litres
 
+
+
+# Another way of doing it, using the floor function
+import math
+def litres(time):
+    litres = math.floor(0.5 * time)
+    return  litres
