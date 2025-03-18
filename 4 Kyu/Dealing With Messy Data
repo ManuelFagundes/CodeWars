@@ -1,0 +1,39 @@
+WITH NormalizedProspects AS (
+    SELECT
+        LOWER(TRIM(REPLACE(REPLACE(REPLACE(REPLACE(full_name, 'Dr.', ''), 'Mr.', ''), 'Ms.', ''), 'Jr.', ''))) AS normalized_full_name,
+        credit_limit
+    FROM prospects
+),
+SplitProspects AS (
+    SELECT
+        TRIM(CASE
+            WHEN POSITION(',' IN normalized_full_name) > 0
+            THEN SUBSTR(normalized_full_name, POSITION(',' IN normalized_full_name) + 1)
+            ELSE SUBSTR(normalized_full_name, 1, POSITION(' ' IN normalized_full_name) - 1)
+        END) AS prospect_first_name,
+        TRIM(CASE
+            WHEN POSITION(',' IN normalized_full_name) > 0
+            THEN SUBSTR(normalized_full_name, 1, POSITION(',' IN normalized_full_name) - 1)
+            ELSE SUBSTR(normalized_full_name, POSITION(' ' IN normalized_full_name) + 1)
+        END) AS prospect_last_name,
+        credit_limit
+    FROM NormalizedProspects
+),
+MaxProspectLimits AS (
+    SELECT
+        prospect_first_name,
+        prospect_last_name,
+        MAX(credit_limit) AS new_limit
+    FROM SplitProspects
+    GROUP BY prospect_first_name, prospect_last_name
+)
+SELECT
+    c.first_name,
+    c.last_name,
+    c.credit_limit AS old_limit,
+    mpl.new_limit
+FROM customers c
+JOIN MaxProspectLimits mpl
+    ON LOWER(c.first_name) = mpl.prospect_first_name
+    AND LOWER(c.last_name) = mpl.prospect_last_name
+WHERE mpl.new_limit > c.credit_limit;
