@@ -1,0 +1,50 @@
+import math
+
+def stat(strg):
+    if not strg:
+        return ""
+    race_times_str = strg.replace(", ", ",").split(',')
+    times_in_seconds = []
+    for time_str in race_times_str:
+        parts = time_str.strip().split('|')
+        h = int(parts[0])
+        m = int(parts[1])
+        s = int(float(parts[2]))
+        total_seconds = h * 3600 + m * 60 + s
+        times_in_seconds.append(total_seconds)
+
+    if not times_in_seconds:
+        return ""
+
+    # Range
+    min_time = min(times_in_seconds)
+    max_time = max(times_in_seconds)
+    range_seconds = max_time - min_time
+    range_h = range_seconds // 3600
+    range_m = (range_seconds % 3600) // 60
+    range_s = range_seconds % 60
+    range_str = f"{range_h:02d}|{range_m:02d}|{range_s:02d}"
+
+    # Average
+    total_seconds_sum = sum(times_in_seconds)
+    average_seconds = total_seconds_sum // len(times_in_seconds)
+    average_h = average_seconds // 3600
+    average_m = (average_seconds % 3600) // 60
+    average_s = average_seconds % 60
+    average_str = f"{average_h:02d}|{average_m:02d}|{average_s:02d}"
+
+    # Median
+    sorted_times = sorted(times_in_seconds)
+    n = len(sorted_times)
+    if n % 2 == 1:
+        median_seconds = sorted_times[n // 2]
+    else:
+        middle1 = sorted_times[n // 2 - 1]
+        middle2 = sorted_times[n // 2]
+        median_seconds = (middle1 + middle2) // 2
+    median_h = median_seconds // 3600
+    median_m = (median_seconds % 3600) // 60
+    median_s = median_seconds % 60
+    median_str = f"{median_h:02d}|{median_m:02d}|{median_s:02d}"
+
+    return f"Range: {range_str} Average: {average_str} Median: {median_str}"
